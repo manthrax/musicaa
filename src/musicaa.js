@@ -144,7 +144,7 @@ function musicaaUI(){
     var fontURL = './soundfonts/midijs/'
     var fontURL = './soundfonts/MusyngKite/'
     var fontURL = './soundfonts/FluidR3_GM/'
-    var instruments = ['acoustic_grand_piano', 'synth_drum']
+    var instruments = ['acoustic_grand_piano', 'melodic_tom','acoustic_bass']
     var iselectors = [];
 
     this.loadInstruments = function(ondone) {
@@ -164,9 +164,11 @@ function musicaaUI(){
                 //console.log(state, progress);
             },
             onsuccess: function(player){ return function() {
-                MIDI.setInstrument(0, MIDI.GM.byName[instruments[0]].number, 0)
-                MIDI.setInstrument(1, MIDI.GM.byName[instruments[1]].number, 0)
-                if(ondone)ondone();
+                for(var i=0;i<instruments.length;i++){
+                    MIDI.setInstrument(i, MIDI.GM.byName[instruments[i]].number, 0)
+                }
+                if(ondone)
+                    ondone();
                 MIDI.Player.start();
                 if(player && player.paused && player.wasPlaying){
                     player.paused = false;
