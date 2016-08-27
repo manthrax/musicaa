@@ -50,12 +50,12 @@
         <script src="src/vis3.js" type="text/javascript"></script>
         <div id='controls'>
             Music composed by Devin Roth. visualization+js port by Thrax.  :  <text id='status'>Loading...</text></br>
-            <button onclick='musicaa.play("beethoven",4)'>Beethoven</button>
-            <input type="range" min='10' max='200' id="tempo" value="60" oninput="musicaa.tempoChanged(this.value)">
+            <button onclick='musicaa.play("beethoven",4)'>Beethoven++</button>
+            <text id='tempoText'>Tempo:</text><input type="range" min='10' max='200' id="tempo" value="60" oninput="musicaa.tempoChanged(this.value)">
             <select id="inst0" onchange="musicaa.instrumentSelected(0)"></select>
-            <select id="inst1" onchange="musicaa.instrumentSelected(1)"></select>
-            <button id="ppause" onclick='musicaa.playPause()'>stop</button></br>
-            <button onclick='musicaa.play("jazz",4)'>Jazz</button></br>
+            <!--select id="inst1" onchange="musicaa.instrumentSelected(1)"></select-->
+            <button id="ppause" onclick='musicaa.playPause()'>Stop</button></br>
+            <!--button onclick='musicaa.play("jazz",4)'>Jazz</button--></br>
         </div>
     </body>
 </html>

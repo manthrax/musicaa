@@ -3,24 +3,35 @@ function musicaaUI(){
     var player;
 
     this.tempoChanged = function(val){
-        this.player.generator.params.tempo = val|0;
+        val|=0;
+        this.player.generator.params.tempo = val;
+        document.getElementById('tempoText').innerHTML='Tempo:'+val
     }
     this.playPause = function (){
         if(this.player){
-            this.player.paused=!this.player.paused;
             if(this.player.paused)
-                this.player.paused = true;
-            else this.player.play();
-            document.getElementById('ppause').innerHTML=this.player.paused?'Play':'Stop';
+                this.play();
+            else
+                this.pause();
         }
     }
+    this.pause = function () {
+        this.player.paused=true;
+        this.player.wasPlaying=false;
+        document.getElementById('ppause').innerHTML='Play';
+    }
     this.play = function (type) {
+        document.getElementById('ppause').innerHTML='Stop';
+
         type = type ? type : 'beethoven';
         var generator = musicaa.composers[type];
         if(!this.player)
             this.player = musicaa.sequencer();
         var player = this.player;
         player.generator = generator;
+        
+    this.tempoChanged(this.player.generator.params.tempo)
+
         player.reset();
         if(player.paused)
             return;
@@ -139,8 +150,10 @@ function musicaaUI(){
     this.loadInstruments = function(ondone) {
         if(MIDI.Player.stop)
             MIDI.Player.stop();
+            
         if(this.player)
             this.player.paused = true;
+
         MIDI.loadPlugin({
             soundfontUrl: fontURL,
             instruments: instruments,
@@ -155,7 +168,7 @@ function musicaaUI(){
                 MIDI.setInstrument(1, MIDI.GM.byName[instruments[1]].number, 0)
                 if(ondone)ondone();
                 MIDI.Player.start();
-                if(player && player.paused){
+                if(player && player.paused && player.wasPlaying){
                     player.paused = false;
                     player.play();
                 }
@@ -164,8 +177,12 @@ function musicaaUI(){
     }
 
     this.instrumentSelected = function (id) {
-        if(this.player)
+        if(this.player){
+            if(!this.player.paused){
+                this.player.wasPlaying = true;
+            }
             this.player.stop();
+        }
         var elem = iselectors[id];
         instruments[id] = elem.value;
         this.loadInstruments();
@@ -174,11 +191,13 @@ function musicaaUI(){
     document.body.onload = function() {
         function buildSelector(id) {
             var elem = document.getElementById('inst' + id);
-            iselectors.push(elem);
-            var st = '';
-            for (var i in MIDI.GM.byName)
-                st += '<option ' + (i == instruments[id] ? 'selected ' : '') + ' value="' + i + '" onselect>' + i + '</option>';
-            elem.innerHTML = st;
+            if(elem){
+                iselectors.push(elem);
+                var st = '';
+                for (var i in MIDI.GM.byName)
+                    st += '<option ' + (i == instruments[id] ? 'selected ' : '') + ' value="' + i + '" onselect>' + i + '</option>';
+                elem.innerHTML = st;
+            }
         }
         buildSelector(0);
         buildSelector(1);

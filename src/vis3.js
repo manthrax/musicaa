@@ -80,7 +80,7 @@ var vis3 = function() {
         // m.position.y+=0.2;
         var easeInFn = TWEEN.Easing.Quintic.Out;
         var easeOutFn = TWEEN.Easing.Quintic.Out;
-        var edur = 500;
+        var edur = 250;
 
         function entween(m,elem,val,dur,endval,enddur){
             var ptweenUp = new TWEEN.Tween(elem).to(val,dur).easing(easeInFn);
